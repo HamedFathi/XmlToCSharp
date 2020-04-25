@@ -13,11 +13,15 @@ namespace Xml2CSharp
             _classInfo = classInfo;
         }
 
-        public void Write(TextWriter textWriter)
+    public void Write(TextWriter textWriter, string @namespace = null)
         {
             using (textWriter)
+            {
+                textWriter.WriteLine("using System.Collections.Generic;");
+                textWriter.WriteLine("using System.Xml.Serialization;");
+                textWriter.WriteLine("");
                 foreach (var @class in _classInfo)
-                {                    
+                {
                     textWriter.WriteLine("[XmlRoot(ElementName=\"{0}\", Namespace=\"{1}\")]", @class.XmlName, @class.Namespace);
                     textWriter.WriteLine("public class {0} {{", @class.Name);
                     foreach (var field in @class.Fields)
@@ -29,6 +33,7 @@ namespace Xml2CSharp
                     textWriter.WriteLine("}");
                     textWriter.WriteLine("");
                 }
+            }
         }
     }
 }
